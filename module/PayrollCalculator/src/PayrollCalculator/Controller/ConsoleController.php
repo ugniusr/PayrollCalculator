@@ -37,11 +37,8 @@ class ConsoleController extends AbstractActionController
             return "Invalid extention. Has to be ." . $extension . "\n";
         }
         
-        // Generate pay day array to be written to the file
-        $CSVdata = $this->GeneratePayDates();
-
-        // Write the pay days to file
-        if ($this->WriteDataToFile($CSVdata, $fileName))
+        // Generate pay days and write them to file
+        if ($this->GeneratePayDatesAndWriteToFile($fileName))
         {
             return "Done! The paydays for the remainder of the year are saved in $fileName.\n"; 
         }
@@ -51,38 +48,16 @@ class ConsoleController extends AbstractActionController
         }
     }
 
-    private function GeneratePayDates()
+    private function GeneratePayDatesAndWriteToFile($fileName)
     {
         // CONFIG:
         $month_array = array('January','February','March','April','May','June',
                             'July','August','September','October','November','December');
-        $bonuspayday = 15;
+        $defaultbonuspayday = 15;
         date_default_timezone_set('UTC');
         $today = date('Y-m-d');
-        $CSVdata = array();
-        $CSVdata[] = "Month,BonusDate,SalaryDate";
 
-        // Generate PayDay array to be written to the file
-        for ($i = intval(date("m")); $i <= 12; $i++)
-        {
-            $_SalaryDay = $this->getSalaryDay($i);
-            $_BonusDay = $this->getBonusDay($i, $bonuspayday);
-            
-            if (strtotime($_SalaryDay) < strtotime($today))
-                $_SalaryDay = '';
-            if (strtotime($_BonusDay) < strtotime($today))
-                $_BonusDay = '';
-            
-            if (!empty($_SalaryDay) || !empty($_BonusDay))
-            {
-                $CSVdata[] = $month_array[$i-1] . "," . $_SalaryDay . "," . $_BonusDay . "\n";
-            }
-        }
-        return $CSVdata;
-    }
 
-    private function WriteDataToFile(Array $data, $fileName)
-    {
         // Check if the file already exists
         if (file_exists($fileName))
         {
@@ -96,10 +71,26 @@ class ConsoleController extends AbstractActionController
         // Create the file
         $handle = fopen($fileName, 'w') or die('Cannot create or open file:  '.$fileName);
 
-        // Write data in variable $data to file $fileName
-        for ($j = 1; $j <= count($data); $j++)
+        // Generate PayDay array and write it to the file
+        fwrite($handle, "Month,BonusDate,SalaryDate\n");
+
+        for ($i = intval(date("m")); $i <= 12; $i++)
         {
-            fwrite($handle, $data[$j-1]);
+            // get the dates for the specific month
+            $_SalaryDay = $this->getSalaryDay($i);
+            $_BonusDay = $this->getBonusDay($i, $defaultbonuspayday);
+            
+            // check if the dates have not yet passed
+            if (strtotime($_SalaryDay) < strtotime($today))
+                $_SalaryDay = '';
+            if (strtotime($_BonusDay) < strtotime($today))
+                $_BonusDay = '';
+            
+            // if at least one date is not EMPTY, write the whole line to file:
+            if (!empty($_SalaryDay) || !empty($_BonusDay))
+            {
+                fwrite($handle, $month_array[$i-1] . "," . $_SalaryDay . "," . $_BonusDay . "\n");
+            }
         }
 
         // Close the file
@@ -107,6 +98,7 @@ class ConsoleController extends AbstractActionController
 
         return true;
     }
+
 
     private function getSalaryDay($month)
     {

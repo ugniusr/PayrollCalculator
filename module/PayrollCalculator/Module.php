@@ -26,10 +26,10 @@ class Module
     {
         return array(
             // Describe available commands
-            'outputpaydays <FileName.CSV>'    => 'Show pay days for the remainder of the year',
+            'outputpaydays FileName.csv'    => 'Show pay days for the remainder of the year',
 
             // Describe expected parameters
-            array( 'FileName.CSV',            'A file where you would like your output saved' ),
+            array( 'FileName.csv',            'A file where you would like your output saved' ),
         );
     }
 
