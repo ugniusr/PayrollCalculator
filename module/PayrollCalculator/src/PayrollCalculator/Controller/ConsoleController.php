@@ -72,7 +72,7 @@ class ConsoleController extends AbstractActionController
         $handle = fopen($fileName, 'w') or die('Cannot create or open file:  '.$fileName);
 
         // Generate PayDay array and write it to the file
-        fwrite($handle, "Month,BonusDate,SalaryDate\n");
+        fwrite($handle, "Month,SalaryDate,BonusDate\n");
 
         for ($i = intval(date("m")); $i <= 12; $i++)
         {
@@ -124,7 +124,7 @@ class ConsoleController extends AbstractActionController
         $year = date('Y');
         
         // DEFAULT VALUE:
-        $BonusDay =  $year .'-' . $month . '-' . $defaultday; 
+        $BonusDay =  date("Y-m-d", strtotime($year .'-' . $month . '-' . $defaultday));
         $weekday = intval(date("N", strtotime($BonusDay)));
 
         // IF WEEKEND:
