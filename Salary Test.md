@@ -1,0 +1,10 @@
+# The Salary Test
+----
+## Introduction
+To proceed with your interview process, we would like to ask you to build a small sample application. This doesn’t have to be a rock-solid, highly scalable super fancy production-ready application, but just something that allows us to get an idea of your coding skills. You can make it as basic or as "Enterprise Ready" as you like.
+This document describes what we affectionately call ‘The Rainbowdash Test’.There are no limits as to the amount of time you spend on this or the amount of code you write, but bear in mind that we are only human and have to read your output. 
+If you need frameworks, libraries or databases to write the application, please mention them in the documentation for your application.Once you’ve finished the application and documentation, please send your results to paul.curry@letsjoin.com
+## Requirements
+You are required to create a small command-line utility to help a fictional company determine the dates they need to pay salaries to their sales department.This company is handling their sales payroll in the following way:* Sales staff get a regular monthly fixed base salary and a monthly bonus.* The base salaries are paid on the last day of the month unless that day is a Saturday or aSunday (weekend). In that case, salaries are paid before the weekend.* On the 15th of every month bonuses are paid for the previous month, unless that day is aweekend. In that case, they are paid the first Wednesday after the 15th.The output of the utility should be a CSV file, containing the payment dates for the remainder of this year. The CSV file should contain a column for the month name, a column that contains the salary payment date for that month, and a column that contains the bonus payment date.
+## Flowchart
+For your convenience, the diagram attached to this document depicts the process of determining the pay dates of the sales department.
